@@ -4,7 +4,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { promisify } from 'node:util'
-import { clipboard, dialog, shell } from 'electron'
+import { clipboard, dialog, Notification, shell } from 'electron'
 import { type IpcContext, IpcMethod, IpcService } from 'electron-ipc-decorator'
 import { scopedLoggers } from '../../utils/logger'
 
@@ -185,6 +185,67 @@ class FileSystemService extends IpcService {
     } catch (error) {
       scopedLoggers.system.error('Failed to open external URL:', error)
       return false
+    }
+  }
+
+  /**
+   * Show a system notification for a completed download and open the result on click for issue #118.
+   */
+  @IpcMethod()
+  showDownloadCompletedNotification(
+    _context: IpcContext,
+    title: string,
+    body: string,
+    filePaths: string[],
+    downloadPath: string
+  ): boolean {
+    if (!Notification.isSupported()) {
+      return false
+    }
+
+    const notification = new Notification({
+      title,
+      body,
+      silent: false
+    })
+
+    notification.on('click', () => {
+      void this.openNotificationTarget(filePaths, downloadPath)
+    })
+
+    notification.show()
+    return true
+  }
+
+  /**
+   * Open the saved file when it exists, otherwise open the download directory.
+   */
+  private async openNotificationTarget(filePaths: string[], downloadPath: string): Promise<void> {
+    for (const filePath of filePaths) {
+      const sanitizedPath = this.sanitizePath(filePath)
+      const normalizedPath = path.normalize(sanitizedPath)
+      const stats = await fs.stat(normalizedPath).catch(() => null)
+
+      if (!stats?.isFile()) {
+        continue
+      }
+
+      const result = await shell.openPath(normalizedPath)
+      if (!result) {
+        return
+      }
+
+      scopedLoggers.system.error('Failed to open notification file target:', result)
+    }
+
+    if (!downloadPath) {
+      return
+    }
+
+    const normalizedDownloadPath = path.normalize(this.sanitizePath(downloadPath))
+    const result = await shell.openPath(normalizedDownloadPath)
+    if (result) {
+      scopedLoggers.system.error('Failed to open notification download path:', result)
     }
   }
 

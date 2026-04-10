@@ -317,6 +317,7 @@
     "subscriptions": "구독",
     "preferences": "환경설정",
     "supportedSites": "지원되는 사이트",
+    "tools": "도구",
     "theme": "테마:"
   },
   "notifications": {
@@ -442,6 +443,10 @@
     "launchAtLoginUnsupported": "자동 실행은 macOS 및 Windows에서만 사용할 수 있습니다.",
     "enableAnalytics": "VidBee 개선에 참여해주세요",
     "enableAnalyticsDescription": "익명의 사용 데이터를 공유하면 앱이 어떻게 사용되는지 이해하고 개선 우선순위를 정하는 데 도움이 됩니다.",
+    "enableDownloadNotifications": "다운로드 알림",
+    "enableDownloadNotificationsDescription": "다운로드가 완료되면 시스템 알림을 표시합니다.",
+    "downloadWithoutChannelSubfolders": "채널 하위 폴더 없이 비디오 저장",
+    "downloadWithoutChannelSubfoldersDescription": "단일 비디오 다운로드를 채널 하위 폴더 대신 Videos 폴더에 바로 저장합니다.",
     "embedChapters": "챕터 포함",
     "embedChaptersDescription": "사용 가능한 경우 파일에 챕터 마커를 추가",
     "embedMetadata": "메타데이터 포함",
@@ -472,6 +477,8 @@
     "proxy": "프록시",
     "proxyDescription": "네트워크 요청용 프록시 서버",
     "proxyPlaceholder": "http://proxy:port",
+    "rememberLastAudioLanguage": "마지막 오디오 언어 기억",
+    "rememberLastAudioLanguageDescription": "앞으로의 오디오 다운로드에서 마지막으로 선택한 오디오 언어를 기본값으로 다시 사용합니다.",
     "selectConfigFile": "설정 파일 선택",
     "selectPath": "선택",
     "showMoreFormats": "더 많은 형식 옵션 표시",

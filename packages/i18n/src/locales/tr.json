@@ -317,6 +317,7 @@
     "subscriptions": "Abonelikler",
     "preferences": "Tercihler",
     "supportedSites": "Desteklenen Siteler",
+    "tools": "Araçlar",
     "theme": "Tema:"
   },
   "notifications": {
@@ -442,6 +443,10 @@
     "launchAtLoginUnsupported": "Otomatik başlatma yalnızca macOS ve Windows'ta kullanılabilir.",
     "enableAnalytics": "VidBee'yi geliştirmeye yardımcı olun",
     "enableAnalyticsDescription": "Uygulamanın nasıl kullanıldığını anlamamıza ve iyileştirmelere öncelik vermemize yardımcı olmak için anonim kullanım verilerini paylaşın.",
+    "enableDownloadNotifications": "İndirme bildirimleri",
+    "enableDownloadNotificationsDescription": "Bir indirme tamamlandığında sistem bildirimi göster.",
+    "downloadWithoutChannelSubfolders": "Videoları kanal alt klasörleri olmadan kaydet",
+    "downloadWithoutChannelSubfoldersDescription": "Tekli video indirmelerini kanal alt klasörü oluşturmadan doğrudan Videos klasörüne kaydet.",
     "embedChapters": "Bölümleri gömün",
     "embedChaptersDescription": "Mümkün olduğunda dosyaya bölüm işaretçileri ekleyin",
     "embedMetadata": "Meta verileri gömün",
@@ -472,6 +477,8 @@
     "proxy": "Vekil",
     "proxyDescription": "Ağ istekleri için vekil sunucusu",
     "proxyPlaceholder": "http://proxy:port",
+    "rememberLastAudioLanguage": "Son ses dilini hatırla",
+    "rememberLastAudioLanguageDescription": "Gelecekteki ses indirmelerinde son seçtiğiniz ses dilini varsayılan olarak yeniden kullan.",
     "selectConfigFile": "Ayar dosyasını seçin",
     "selectPath": "Seç",
     "showMoreFormats": "Daha fazla format seçeneği göster",

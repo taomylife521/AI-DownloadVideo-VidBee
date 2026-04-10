@@ -7,6 +7,9 @@ import { ipcServices } from '../lib/ipc'
 
 // Settings atom
 export const settingsAtom = atom<AppSettings>(defaultSettings)
+export const enableDownloadNotificationsAtom = atom(
+  (get) => get(settingsAtom).enableDownloadNotifications
+)
 
 // Load settings from main process
 export const loadSettingsAtom = atom(null, async (_get, set) => {

@@ -9,7 +9,9 @@ import {
   buildAudioFormatPreference,
   buildVideoFormatPreference
 } from '@shared/utils/format-preferences'
+import { isPlaylistLikeUrl } from '@vidbee/ui/lib/url-kind'
 import { useAddUrlInteraction } from '@vidbee/ui/lib/use-add-url-interaction'
+import { useAddUrlShortcut } from '@vidbee/ui/lib/use-add-url-shortcut'
 import { useAtom, useSetAtom } from 'jotai'
 import { FolderOpen, Loader2 } from 'lucide-react'
 import { useCallback, useEffect, useId, useMemo, useState } from 'react'
@@ -293,22 +295,6 @@ export function DownloadDialog({
     [settings, addDownload, t]
   )
 
-  const handleFetchVideo = useCallback(async () => {
-    if (!url.trim()) {
-      toast.error(t('errors.emptyUrl'))
-      return
-    }
-    setSingleVideoState((prev) => ({
-      ...prev,
-      selectedVideoFormat: '',
-      selectedAudioFormat: '',
-      selectedContainer: undefined,
-      selectedCodec: undefined,
-      selectedFps: undefined
-    }))
-    await fetchVideoInfo(url.trim())
-  }, [url, fetchVideoInfo, t])
-
   const handleParsePlaylistUrl = useCallback(
     async (trimmedUrl: string) => {
       setOpen(true)
@@ -341,6 +327,26 @@ export function DownloadDialog({
     },
     [t]
   )
+
+  const handleFetchVideo = useCallback(async () => {
+    if (!url.trim()) {
+      toast.error(t('errors.emptyUrl'))
+      return
+    }
+    if (isPlaylistLikeUrl(url.trim())) {
+      await handleParsePlaylistUrl(url.trim())
+      return
+    }
+    setSingleVideoState((prev) => ({
+      ...prev,
+      selectedVideoFormat: '',
+      selectedAudioFormat: '',
+      selectedContainer: undefined,
+      selectedCodec: undefined,
+      selectedFps: undefined
+    }))
+    await fetchVideoInfo(url.trim())
+  }, [url, fetchVideoInfo, handleParsePlaylistUrl, t])
 
   const handleParseSingleUrl = useCallback(
     async (trimmedUrl: string) => {
@@ -388,6 +394,11 @@ export function DownloadDialog({
     onOneClickDownload: handleOneClickFromAddUrl,
     onParsePlaylist: handleParsePlaylistUrl,
     onParseSingle: handleParseSingleUrl
+  })
+
+  useAddUrlShortcut({
+    enabled: open,
+    onTrigger: handleOpenAddUrlPopover
   })
 
   const handleOneClickDownload = useCallback(async () => {
@@ -651,9 +662,33 @@ export function DownloadDialog({
     }
   }, [open])
 
-  const handleSingleVideoStateChange = useCallback((updates: Partial<SingleVideoState>) => {
-    setSingleVideoState((prev) => ({ ...prev, ...updates }))
-  }, [])
+  const handleSingleVideoStateChange = useCallback(
+    (updates: Partial<SingleVideoState>) => {
+      setSingleVideoState((prev) => ({ ...prev, ...updates }))
+
+      if (
+        !(settings.rememberLastAudioLanguage && updates.selectedAudioFormat && videoInfo?.formats)
+      ) {
+        return
+      }
+
+      const selectedAudioFormat = videoInfo.formats.find(
+        (format) => format.format_id === updates.selectedAudioFormat
+      )
+      const preferredAudioLanguage = selectedAudioFormat?.language?.trim()
+      if (!(preferredAudioLanguage && preferredAudioLanguage !== settings.preferredAudioLanguage)) {
+        return
+      }
+
+      void saveSetting({ key: 'preferredAudioLanguage', value: preferredAudioLanguage })
+    },
+    [
+      saveSetting,
+      settings.preferredAudioLanguage,
+      settings.rememberLastAudioLanguage,
+      videoInfo?.formats
+    ]
+  )
   const selectedSingleFormat =
     singleVideoState.activeTab === 'video'
       ? singleVideoState.selectedVideoFormat

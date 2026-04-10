@@ -9,11 +9,14 @@ import MingcuteRssFill from '~icons/mingcute/rss-fill'
 import MingcuteRssLine from '~icons/mingcute/rss-line'
 import MingcuteSettingsFill from '~icons/mingcute/settings-3-fill'
 import MingcuteSettingsLine from '~icons/mingcute/settings-3-line'
+import MingcuteToolFill from '~icons/mingcute/tool-fill'
+import MingcuteToolLine from '~icons/mingcute/tool-line'
 
 interface AppSidebarIcons {
   home: AppSidebarIcon
   subscriptions: AppSidebarIcon
   supportedSites: AppSidebarIcon
+  tools: AppSidebarIcon
   settings: AppSidebarIcon
   about: AppSidebarIcon
 }
@@ -30,6 +33,10 @@ const appSidebarIcons: AppSidebarIcons = {
   supportedSites: {
     active: MingcuteCheckCircleFill,
     inactive: MingcuteCheckCircleLine
+  },
+  tools: {
+    active: MingcuteToolFill,
+    inactive: MingcuteToolLine
   },
   settings: {
     active: MingcuteSettingsFill,

@@ -111,9 +111,14 @@ export const resolveAutoPlaylistDownloadPath = (
   return path.join(basePath, kindFolder, title)
 }
 
-export const resolveAutoVideoDownloadPath = (basePath: string, info?: VideoInfo): string => {
+export const resolveAutoVideoDownloadPath = (
+  basePath: string,
+  info?: VideoInfo,
+  skipChannelSubfolders = false
+): string => {
   const root = path.join(basePath, 'Videos')
-  if (!info) {
+  // Issue #263 keeps single-video downloads in the root video folder when users disable channel subfolders.
+  if (!info || skipChannelSubfolders) {
     return root
   }
   const label = info.uploader?.trim() || info.title?.trim()

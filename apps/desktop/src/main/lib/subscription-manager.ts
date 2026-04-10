@@ -20,6 +20,7 @@ import {
   subscriptionItemsTable,
   subscriptionsTable
 } from './database/schema'
+import { dedupeSubscriptionFeedItems } from './subscription-feed-items'
 
 const sanitizeList = (values?: string[]): string[] => {
   if (!values || values.length === 0) {
@@ -195,7 +196,9 @@ export class SubscriptionManager extends EventEmitter {
 
   replaceFeedItems(subscriptionId: string, items: SubscriptionFeedItem[], silent = false): void {
     const database = this.getDatabase()
-    const orderedItems = [...items].sort((a, b) => b.publishedAt - a.publishedAt)
+    const orderedItems = dedupeSubscriptionFeedItems(
+      [...items].sort((a, b) => b.publishedAt - a.publishedAt)
+    )
     const now = Date.now()
     database.transaction((tx) => {
       tx.delete(subscriptionItemsTable)

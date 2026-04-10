@@ -25,6 +25,7 @@ import { useCachedThumbnail } from '../../hooks/use-cached-thumbnail'
 import { sendGlitchTipFeedback } from '../../lib/glitchtip-feedback'
 import { settingsAtom } from '../../store/settings'
 import { useAppInfo } from '../feedback/FeedbackLinks'
+import { pickPreferredAudioFormatId } from './audio-format-preferences'
 
 export interface SingleVideoState {
   title: string
@@ -266,8 +267,13 @@ const FormatList = ({ formats, type, codec, selectedFormat, onFormatChange }: Fo
     } else {
       const hasSelectedAudio = finalAudios.some((format) => format.format_id === selectedFormat)
       if (finalAudios.length > 0 && !(selectedFormat && hasSelectedAudio)) {
-        const best = finalAudios[0]
-        onFormatChange(best.format_id)
+        const preferredFormatId = pickPreferredAudioFormatId(
+          finalAudios,
+          settings.preferredAudioLanguage
+        )
+        if (preferredFormatId) {
+          onFormatChange(preferredFormatId)
+        }
       }
     }
   }, [
@@ -278,6 +284,7 @@ const FormatList = ({ formats, type, codec, selectedFormat, onFormatChange }: Fo
     onFormatChange,
     pickVideoFormatForPreset,
     codec,
+    settings.preferredAudioLanguage,
     getFileSize,
     sortVideoFormatsByQuality,
     sortAudioFormatsByQuality

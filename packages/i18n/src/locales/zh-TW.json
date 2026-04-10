@@ -317,6 +317,7 @@
     "subscriptions": "訂閱",
     "preferences": "偏好設定",
     "supportedSites": "支援的網站",
+    "tools": "工具",
     "theme": "主題："
   },
   "notifications": {
@@ -442,6 +443,10 @@
     "launchAtLoginUnsupported": "自動啟動僅適用於 macOS 和 Windows。",
     "enableAnalytics": "幫助改進 VidBee",
     "enableAnalyticsDescription": "共享匿名使用數據，幫助我們了解應用程序的使用情況並確定改進的優先順序。",
+    "enableDownloadNotifications": "下載通知",
+    "enableDownloadNotificationsDescription": "下載完成時顯示系統通知。",
+    "downloadWithoutChannelSubfolders": "儲存影片時不要建立頻道子資料夾",
+    "downloadWithoutChannelSubfoldersDescription": "將單一影片下載直接存到 Videos 資料夾，而不是建立頻道子資料夾。",
     "embedChapters": "嵌入章節",
     "embedChaptersDescription": "可用時在檔案中加入章節標記",
     "embedMetadata": "嵌入中繼資料",
@@ -472,6 +477,8 @@
     "proxy": "代理伺服器",
     "proxyDescription": "網路請求的代理伺服器",
     "proxyPlaceholder": "http://proxy:port",
+    "rememberLastAudioLanguage": "記住上次的音訊語言",
+    "rememberLastAudioLanguageDescription": "在之後的音訊下載中，預設使用你上次選擇的音訊語言。",
     "selectConfigFile": "選擇設定檔",
     "selectPath": "選擇",
     "showMoreFormats": "顯示更多格式選項",

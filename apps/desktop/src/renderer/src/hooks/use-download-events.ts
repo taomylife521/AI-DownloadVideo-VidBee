@@ -1,8 +1,9 @@
 import type { DownloadItem } from '@shared/types'
-import { useSetAtom, useStore } from 'jotai'
+import { useAtomValue, useSetAtom, useStore } from 'jotai'
 import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { buildFilePathCandidates } from '../../../shared/utils/download-file'
 import { ipcEvents, ipcServices } from '../lib/ipc'
 import {
   addDownloadAtom,
@@ -12,6 +13,7 @@ import {
   removeHistoryRecordAtom,
   updateDownloadAtom
 } from '../store/downloads'
+import { enableDownloadNotificationsAtom } from '../store/settings'
 
 const isFinalStatus = (status?: string): boolean =>
   status === 'completed' || status === 'error' || status === 'cancelled'
@@ -24,6 +26,7 @@ export function useDownloadEvents() {
   const removeHistoryRecord = useSetAtom(removeHistoryRecordAtom)
   const { t } = useTranslation()
   const store = useStore()
+  const enableDownloadNotifications = useAtomValue(enableDownloadNotificationsAtom)
 
   const syncHistoryItem = useCallback(
     async (id: string) => {
@@ -36,8 +39,10 @@ export function useDownloadEvents() {
         if (isFinalStatus(historyItem.status)) {
           removeDownload(id)
         }
+        return historyItem
       } catch (error) {
         console.error('Failed to sync history item:', error)
+        return undefined
       }
     },
     [addHistoryRecord, removeDownload]
@@ -118,7 +123,31 @@ export function useDownloadEvents() {
       }
       updateDownload({ id, changes: { status: 'completed', completedAt: Date.now() } })
       toast.success(t('notifications.downloadCompleted'))
-      void syncHistoryItem(id)
+      void (async () => {
+        const historyItem = await syncHistoryItem(id)
+        if (!(historyItem?.downloadPath && historyItem.title)) {
+          return
+        }
+        if (historyItem.status !== 'completed' || enableDownloadNotifications === false) {
+          return
+        }
+        const format =
+          historyItem.savedFileName?.split('.').pop()?.toLowerCase() ||
+          historyItem.selectedFormat?.ext?.toLowerCase() ||
+          (historyItem.type === 'audio' ? 'mp3' : 'mp4')
+        const filePaths = buildFilePathCandidates(
+          historyItem.downloadPath,
+          historyItem.title,
+          format,
+          historyItem.savedFileName
+        )
+        void ipcServices.fs.showDownloadCompletedNotification(
+          historyItem.title,
+          t('notifications.downloadCompleted'),
+          filePaths,
+          historyItem.downloadPath
+        )
+      })()
     }
 
     const handleError = (rawData: unknown) => {
@@ -181,5 +210,14 @@ export function useDownloadEvents() {
       ipcEvents.removeListener('download:error', errorSubscription)
       ipcEvents.removeListener('download:cancelled', cancelledSubscription)
     }
-  }, [addDownload, removeDownload, removeHistoryRecord, store, syncHistoryItem, t, updateDownload])
+  }, [
+    addDownload,
+    enableDownloadNotifications,
+    removeDownload,
+    removeHistoryRecord,
+    store,
+    syncHistoryItem,
+    t,
+    updateDownload
+  ])
 }

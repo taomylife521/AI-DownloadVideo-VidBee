@@ -19,6 +19,8 @@ files:
   - '!changelogs/**'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  # Issue #103: keep desktop binaries out of app.asar to avoid duplicated resource packaging.
+  - '!resources{,/**}'
 extraResources:
   - from: resources
     to: resources

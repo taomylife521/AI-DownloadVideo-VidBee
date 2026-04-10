@@ -1,17 +1,26 @@
-const GLOBAL_OPERATIONAL_PATTERNS = ['ffmpeg not initialized. call initialize() first.']
+const GLOBAL_OPERATIONAL_PATTERNS = [
+  'ffmpeg not initialized. call initialize() first.',
+  'manual download feedback submitted'
+]
 
 const DOWNLOAD_OPERATIONAL_PATTERNS = [
   'could not copy chrome cookie database',
   'failed to decrypt with dpapi',
   'could not find firefox cookies database',
+  'custom safari cookies database not found',
+  'fresh cookies (not necessarily logged in) are needed',
   "sign in to confirm you're not a bot",
   'sign in to confirm you’re not a bot',
   'unsupported url',
   'video unavailable',
   'requested format is not available',
+  'no video formats found',
+  'unable to extract encoded url',
+  'please report this issue on https://github.com/yt-dlp/yt-dlp/issues',
   'requested range not satisfiable',
   'invalid data found when processing input',
   'unable to rename file',
+  'service unavailable. giving up after',
   'winerror 32',
   'winerror 2',
   'read timed out',
@@ -27,8 +36,10 @@ const SUBSCRIPTION_OPERATIONAL_PATTERNS = [
   'request timed out after 60000ms',
   'aggregateerror',
   'attribute without value',
+  'non-whitespace before first tag.',
   'unexpected close tag',
   'feed not recognized as rss 1 or 2.',
+  'invalid character in entity name',
   'invalid character in tag name',
   'net::err_connection_reset',
   'net::err_timed_out',
@@ -38,6 +49,27 @@ const SUBSCRIPTION_OPERATIONAL_PATTERNS = [
   'client network socket disconnected before secure tls connection was established',
   'connect etimedout'
 ]
+
+const AUTO_UPDATER_OPERATIONAL_PATTERNS = [
+  'net::err_connection_reset',
+  'net::err_connection_closed',
+  'net::err_connection_timed_out',
+  'net::err_timed_out',
+  'net::err_internet_disconnected',
+  'net::err_proxy_connection_failed',
+  'net::err_connection_refused',
+  'net::err_network_io_suspended',
+  'net::err_name_not_resolved',
+  'net::err_http2_protocol_error',
+  'net::err_network_changed',
+  'net::err_connection_aborted',
+  'net::err_ssl_protocol_error',
+  'net::err_address_unreachable',
+  'net::err_socket_not_connected',
+  'net::err_cert_authority_invalid',
+  'net::err_tunnel_connection_failed',
+  'net::err_network_access_denied'
+] as const
 
 interface TelemetryContextShape {
   tags?: Record<string, boolean | number | string | undefined>
@@ -84,7 +116,7 @@ const readSourceTag = (tags: Record<string, unknown> | undefined): string => {
  * @param patterns The operational error patterns to match.
  * @returns True when a known pattern is present.
  */
-const matchesAnyPattern = (messages: string[], patterns: string[]): boolean => {
+const matchesAnyPattern = (messages: string[], patterns: readonly string[]): boolean => {
   return patterns.some((pattern) => messages.some((message) => message.includes(pattern)))
 }
 
@@ -179,6 +211,10 @@ const isOperationalTelemetry = (messages: string[], source: string): boolean => 
 
   if (source.startsWith('subscription')) {
     return matchesAnyPattern(messages, SUBSCRIPTION_OPERATIONAL_PATTERNS)
+  }
+
+  if (source.startsWith('auto-updater')) {
+    return matchesAnyPattern(messages, AUTO_UPDATER_OPERATIONAL_PATTERNS)
   }
 
   return false

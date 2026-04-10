@@ -317,6 +317,7 @@
     "subscriptions": "الاشتراكات",
     "preferences": "التفضيلات",
     "supportedSites": "المواقع المدعومة",
+    "tools": "الأدوات",
     "theme": "المظهر:"
   },
   "notifications": {
@@ -442,6 +443,10 @@
     "launchAtLoginUnsupported": "البدء التلقائي متاح فقط على macOS و Windows.",
     "enableAnalytics": "مساعدة في تحسين VidBee",
     "enableAnalyticsDescription": "مشاركة بيانات الاستخدام المجهولة لمساعدتنا في فهم كيفية استخدام التطبيق وأولويات التحسينات.",
+    "enableDownloadNotifications": "إشعارات التنزيل",
+    "enableDownloadNotificationsDescription": "اعرض إشعار نظام عند اكتمال التنزيل.",
+    "downloadWithoutChannelSubfolders": "احفظ الفيديوهات بدون مجلدات القنوات الفرعية",
+    "downloadWithoutChannelSubfoldersDescription": "احفظ تنزيلات الفيديو الفردية مباشرة داخل مجلد Videos بدلاً من إنشاء مجلد فرعي باسم القناة.",
     "embedChapters": "تضمين الفصول",
     "embedChaptersDescription": "إضافة علامات الفصول إلى الملف عند توفرها",
     "embedMetadata": "تضمين البيانات الوصفية",
@@ -472,6 +477,8 @@
     "proxy": "الوكيل",
     "proxyDescription": "خادم الوكيل لطلبات الشبكة",
     "proxyPlaceholder": "http://proxy:port",
+    "rememberLastAudioLanguage": "تذكر آخر لغة صوت",
+    "rememberLastAudioLanguageDescription": "استخدم آخر لغة صوت اخترتها كافتراضي لتنزيلات الصوت القادمة.",
     "selectConfigFile": "اختر ملف التكوين",
     "selectPath": "اختر",
     "showMoreFormats": "إظهار المزيد من خيارات التنسيق",

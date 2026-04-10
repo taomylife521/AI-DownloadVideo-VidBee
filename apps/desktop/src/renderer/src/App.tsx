@@ -65,6 +65,7 @@ function AppContent() {
   const location = useLocation()
   const currentPage = pathToPage(location.pathname)
   const supportedSitesUrl = 'https://vidbee.org/supported-sites/'
+  const toolsUrl = 'https://vidbee.org/tools/'
   const analyticsEnabled = settings.enableAnalytics ?? true
   const isRybbitReady = useRybbitScript(analyticsEnabled)
 
@@ -97,6 +98,10 @@ function AppContent() {
 
   const handleOpenSupportedSites = () => {
     window.open(supportedSitesUrl, '_blank')
+  }
+
+  const handleOpenTools = () => {
+    window.open(toolsUrl, '_blank')
   }
 
   useEffect(() => {
@@ -241,6 +246,7 @@ function AppContent() {
       <Sidebar
         currentPage={currentPage}
         onOpenSupportedSites={handleOpenSupportedSites}
+        onOpenTools={handleOpenTools}
         onPageChange={handlePageChange}
       />
 

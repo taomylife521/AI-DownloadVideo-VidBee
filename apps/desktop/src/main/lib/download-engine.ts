@@ -55,6 +55,28 @@ interface DownloadProcess {
   process: YTDlpEventEmitter
 }
 
+/**
+ * Parse yt-dlp JSON output while tolerating newline-delimited payloads.
+ *
+ * Issue ref: #316.
+ */
+const parseVideoInfoPayload = (stdout: string): VideoInfo => {
+  try {
+    return JSON.parse(stdout) as VideoInfo
+  } catch (error) {
+    const firstPayloadLine = stdout
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .find((line) => line.startsWith('{') || line.startsWith('['))
+
+    if (!firstPayloadLine) {
+      throw error
+    }
+
+    return JSON.parse(firstPayloadLine) as VideoInfo
+  }
+}
+
 class DownloadEngine extends EventEmitter {
   private readonly activeDownloads: Map<string, DownloadProcess> = new Map()
   private readonly queue: DownloadQueue
@@ -100,7 +122,7 @@ class DownloadEngine extends EventEmitter {
       process.on('close', (code) => {
         if (code === 0 && stdout) {
           try {
-            const info = JSON.parse(stdout)
+            const info = parseVideoInfoPayload(stdout)
 
             // Calculate estimated file size for formats missing filesize information
             // Using tbr (total bitrate in kbps) and duration (in seconds)
@@ -178,7 +200,7 @@ class DownloadEngine extends EventEmitter {
       process.on('close', (code) => {
         if (code === 0 && stdout) {
           try {
-            const info = JSON.parse(stdout)
+            const info = parseVideoInfoPayload(stdout)
 
             // Calculate estimated file size for formats missing filesize information
             // Using tbr (total bitrate in kbps) and duration (in seconds)
@@ -763,7 +785,11 @@ class DownloadEngine extends EventEmitter {
     }
 
     if (!options.customDownloadPath?.trim()) {
-      resolvedDownloadPath = resolveAutoVideoDownloadPath(defaultDownloadPath, videoInfo)
+      resolvedDownloadPath = resolveAutoVideoDownloadPath(
+        defaultDownloadPath,
+        videoInfo,
+        settings.downloadWithoutChannelSubfolders
+      )
       options.customDownloadPath = resolvedDownloadPath
     }
 

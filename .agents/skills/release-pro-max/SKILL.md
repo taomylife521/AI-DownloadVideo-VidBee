@@ -1,5 +1,5 @@
 ---
-name: release-skills
+name: release-pro-max
 description: Universal release workflow. Auto-detects version files and changelogs. Supports Node.js, Python, Rust, Claude Plugin, and generic projects. Use when user says "release", "发布", "new version", "bump version", "push", "推送".
 ---
 
@@ -9,7 +9,7 @@ Universal release workflow supporting any project type with multi-language chang
 
 ## Quick Start
 
-Just run `/release-skills` - auto-detects your project configuration.
+Just run `/release-pro-max` - auto-detects your project configuration.
 
 ## Supported Projects
 
@@ -50,16 +50,16 @@ Just run `/release-skills` - auto-detects your project configuration.
 
 **Language Detection Rules**:
 
-| Filename Pattern | Language |
-|------------------|----------|
-| `CHANGELOG.md` (no suffix) | en (default) |
-| `CHANGELOG.zh.md` / `CHANGELOG_CN.md` / `CHANGELOG.zh-CN.md` | zh |
-| `CHANGELOG.ja.md` / `CHANGELOG_JP.md` | ja |
-| `CHANGELOG.ko.md` / `CHANGELOG_KR.md` | ko |
-| `CHANGELOG.de.md` / `CHANGELOG_DE.md` | de |
-| `CHANGELOG.fr.md` / `CHANGELOG_FR.md` | fr |
-| `CHANGELOG.es.md` / `CHANGELOG_ES.md` | es |
-| `CHANGELOG.{lang}.md` | Corresponding language code |
+Changelog files follow the pattern `CHANGELOG_{LANG}.md` or `CHANGELOG.{lang}.md`, where `{lang}` / `{LANG}` is a language or region code.
+
+| Pattern | Example | Language |
+|---------|---------|----------|
+| No suffix | `CHANGELOG.md` | en (default) |
+| `_{LANG}` (uppercase) | `CHANGELOG_CN.md`, `CHANGELOG_JP.md` | Corresponding language |
+| `.{lang}` (lowercase) | `CHANGELOG.zh.md`, `CHANGELOG.ja.md` | Corresponding language |
+| `.{lang-region}` | `CHANGELOG.zh-CN.md` | Corresponding region variant |
+
+Common language codes: `zh` (Chinese), `ja` (Japanese), `ko` (Korean), `de` (German), `fr` (French), `es` (Spanish).
 
 **Output Example**:
 ```
@@ -91,6 +91,8 @@ Categorize by conventional commit types:
 | test | Test changes |
 | style | Formatting, styling |
 | chore | Maintenance (skip in changelog) |
+
+> **Note**: This categorization is for internal analysis only. When writing changelog entries (Step 4), ALL descriptions must be rewritten in user-facing language. See Step 4 writing guidelines.
 
 **Breaking Change Detection**:
 - Commit message starts with `BREAKING CHANGE`
@@ -126,34 +128,59 @@ For each detected changelog file:
    - **Third-party contributions**: Append contributor attribution `(by @username)` to the changelog entry
 4. **Insert at file head** (preserve existing content)
 
-**Section Title Translations** (built-in):
+**⚠️ CRITICAL: User-Facing Writing Guidelines**
+
+Changelog is written for **end users**, NOT developers. Every entry must describe what changed **from the user's perspective** and highlight the value it brings. Follow these rules strictly:
+
+- **DO NOT** include any technical/programming terms: no "refactor", "component", "module", "API", "SDK", "runtime", "middleware", "state management", "IPC", "store", "hook", "cache invalidation", "dependency injection", etc.
+- **DO NOT** mention internal code structure: no file names, function names, class names, variable names, database tables, or architecture details.
+- **DO NOT** include engineering process items: no "code cleanup", "refactoring", "migration", "dependency update", "CI/CD", "build optimization", "type safety improvement", etc.
+- **DO** describe what the user can now do, see, or experience differently.
+- **DO** use plain, everyday language that any non-technical person can understand.
+- **DO** focus on user benefits and outcomes, not implementation details.
+
+**How to transform technical commits into user-facing entries**:
+
+| Technical commit | User-facing entry |
+|-----------------|-------------------|
+| `refactor: reorganize desktop component structure` | *(skip — no user-visible change)* |
+| `feat: add OAuth2 authentication module` | 支持使用第三方账号登录（如 Google、GitHub） |
+| `fix: fix memory leak in connection pool` | 修复了长时间使用后应用变卡的问题 |
+| `perf: optimize image loading pipeline` | 图片加载速度更快了 |
+| `feat: improve document import and library actions` | 导入文档更方便，书库管理操作更顺手 |
+| `fix: update sign-in and sign-up form components` | 优化了登录和注册页面的体验 |
+| `refactor: improve IPC flow and store sync` | *(skip — no user-visible change)* |
+
+**Filtering rules**:
+- **Skip entirely**: commits that are purely internal (refactor, code cleanup, test-only, CI/CD, dependency updates) with NO user-visible effect.
+- **Rewrite**: commits that have user-visible effects but are described technically — rewrite them in user language.
+- Only `feat` and `fix` type changes typically produce user-facing entries. `perf` entries are included only when the improvement is noticeable to users.
+- If after filtering, a section would be empty, omit that section entirely.
+
+**Section Title Translations** (built-in, user-facing only):
 
 | Type | en | zh | ja | ko | de | fr | es |
 |------|----|----|----|----|----|----|-----|
-| feat | Features | 新功能 | 新機能 | 새로운 기능 | Funktionen | Fonctionnalités | Características |
-| fix | Fixes | 修复 | 修正 | 수정 | Fehlerbehebungen | Corrections | Correcciones |
-| docs | Documentation | 文档 | ドキュメント | 문서 | Dokumentation | Documentation | Documentación |
-| refactor | Refactor | 重构 | リファクタリング | 리팩토링 | Refactoring | Refactorisation | Refactorización |
-| perf | Performance | 性能优化 | パフォーマンス | 성능 | Leistung | Performance | Rendimiento |
-| breaking | Breaking Changes | 破坏性变更 | 破壊的変更 | 주요 변경사항 | Breaking Changes | Changements majeurs | Cambios importantes |
+| feat | What's New | 新增功能 | 新機能 | 새로운 기능 | Neuigkeiten | Nouveautés | Novedades |
+| fix | Improvements | 改进与修复 | 改善 | 개선 사항 | Verbesserungen | Améliorations | Mejoras |
+| perf | Faster & Smoother | 更快更流畅 | パフォーマンス向上 | 더 빠르게 | Schneller & Besser | Plus rapide | Más rápido |
+| breaking | Important Changes | 重要变更 | 重要な変更 | 중요 변경사항 | Wichtige Änderungen | Changements importants | Cambios importantes |
+
+> **Note**: `docs`, `refactor`, `test`, `style`, `chore` types are **excluded** from the changelog. They are internal engineering concerns with no direct user value.
 
 **Changelog Format**:
 
 ```markdown
 ## {VERSION} - {YYYY-MM-DD}
 
-### Features
-- Description of new feature
-- Description of third-party contribution (by @username)
+### What's New
+- User-facing description of what they can now do (by @username)
 
-### Fixes
-- Description of fix
-
-### Documentation
-- Description of docs changes
+### Improvements
+- User-facing description of what got better
 ```
 
-Only include sections that have changes. Omit empty sections.
+Only include sections that have changes. Omit empty sections. Remember: every line must be understandable by a non-technical user.
 
 **Third-Party Attribution Rules**:
 - Only add `(by @username)` for contributors who are NOT the repo owner
@@ -167,24 +194,24 @@ English (CHANGELOG.md):
 ```markdown
 ## 1.3.0 - 2026-01-22
 
-### Features
-- Add user authentication module (by @contributor1)
-- Support OAuth2 login
+### What's New
+- Sign in with your Google or GitHub account (by @contributor1)
+- Link your existing account with third-party login
 
-### Fixes
-- Fix memory leak in connection pool
+### Improvements
+- Fixed an issue where the app would slow down after extended use
 ```
 
 Chinese (CHANGELOG.zh.md):
 ```markdown
 ## 1.3.0 - 2026-01-22
 
-### 新功能
-- 新增用户认证模块 (by @contributor1)
-- 支持 OAuth2 登录
+### 新增功能
+- 支持使用 Google 或 GitHub 账号登录 (by @contributor1)
+- 可以将已有账号与第三方登录方式绑定
 
-### 修复
-- 修复连接池内存泄漏问题
+### 改进与修复
+- 修复了长时间使用后应用变卡的问题
 ```
 
 Japanese (CHANGELOG.ja.md):
@@ -192,11 +219,11 @@ Japanese (CHANGELOG.ja.md):
 ## 1.3.0 - 2026-01-22
 
 ### 新機能
-- ユーザー認証モジュールを追加 (by @contributor1)
-- OAuth2 ログインをサポート
+- GoogleやGitHubアカウントでログインできるようになりました (by @contributor1)
+- 既存アカウントとサードパーティログインの連携が可能に
 
-### 修正
-- コネクションプールのメモリリークを修正
+### 改善
+- 長時間使用時にアプリが遅くなる問題を修正
 ```
 
 ### Step 5: Group Changes by Skill/Module
@@ -305,10 +332,10 @@ Commits created:
 
 Changelog preview (en):
   ## 1.3.0 - 2026-01-22
-  ### Features
-  - Add watercolor and minimalist styles to cover-image
-  ### Fixes
-  - Improve panel layout for long dialogues in comic
+  ### What's New
+  - New cover styles available: watercolor and minimalist
+  ### Improvements
+  - Comics with longer conversations now display more cleanly
 
 Ready to create release commit and tag.
 ```
@@ -379,14 +406,15 @@ changelog:
 
   # Section mapping (conventional commit type → changelog section)
   # Use null to skip a type in changelog
+  # Sections should use user-facing names, not technical terms
   sections:
-    feat: Features
-    fix: Fixes
-    docs: Documentation
-    refactor: Refactor
-    perf: Performance
-    test: Tests
-    chore: null
+    feat: "What's New"
+    fix: Improvements
+    perf: "Faster & Smoother"
+    docs: null       # Skip — internal only
+    refactor: null   # Skip — internal only
+    test: null       # Skip — internal only
+    chore: null      # Skip — internal only
 
 # Commit message format
 commit:
@@ -431,17 +459,17 @@ Changes grouped by skill/module:
 
 Changelog preview (en):
   ## 1.3.0 - 2026-01-22
-  ### Features
-  - Add watercolor and minimalist styles to cover-image
-  ### Fixes
-  - Improve panel layout for long dialogues in comic
+  ### What's New
+  - New cover styles available: watercolor and minimalist
+  ### Improvements
+  - Comics with longer conversations now display more cleanly
 
 Changelog preview (zh):
   ## 1.3.0 - 2026-01-22
-  ### 新功能
-  - 为 cover-image 添加水彩和极简风格
-  ### 修复
-  - 改进 comic 长对话的面板布局
+  ### 新增功能
+  - 新增封面风格：水彩和极简
+  ### 改进与修复
+  - 长对话的漫画排版更加美观
 
 Commits to create:
   1. feat(baoyu-cover-image): add watercolor and minimalist styles
@@ -454,11 +482,11 @@ No changes made. Run without --dry-run to execute.
 ## Example Usage
 
 ```
-/release-skills              # Auto-detect version bump
-/release-skills --dry-run    # Preview only
-/release-skills --minor      # Force minor bump
-/release-skills --patch      # Force patch bump
-/release-skills --major      # Force major bump (with confirmation)
+/release-pro-max              # Auto-detect version bump
+/release-pro-max --dry-run    # Preview only
+/release-pro-max --minor      # Force minor bump
+/release-pro-max --patch      # Force patch bump
+/release-pro-max --major      # Force major bump (with confirmation)
 ```
 
 ## When to Use

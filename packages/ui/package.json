@@ -8,7 +8,9 @@
     "./base.css": "./src/base.css",
     "./components/ui/*": "./src/components/ui/*.tsx",
     "./lib/cn": "./src/lib/cn.ts",
-    "./lib/use-add-url-interaction": "./src/lib/use-add-url-interaction.ts"
+    "./lib/url-kind": "./src/lib/url-kind.ts",
+    "./lib/use-add-url-interaction": "./src/lib/use-add-url-interaction.ts",
+    "./lib/use-add-url-shortcut": "./src/lib/use-add-url-shortcut.ts"
   },
   "peerDependencies": {
     "react": "^19.0.0",

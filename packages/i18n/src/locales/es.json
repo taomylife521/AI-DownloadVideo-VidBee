@@ -317,6 +317,7 @@
     "subscriptions": "Suscripciones",
     "preferences": "Preferencias",
     "supportedSites": "Sitios Soportados",
+    "tools": "Herramientas",
     "theme": "Tema:"
   },
   "notifications": {
@@ -442,6 +443,10 @@
     "launchAtLoginUnsupported": "El inicio automático solo está disponible en macOS y Windows.",
     "enableAnalytics": "Ayuda a mejorar VidBee",
     "enableAnalyticsDescription": "Comparte datos de uso anónimos para ayudarnos a entender cómo se usa la aplicación y priorizar mejoras.",
+    "enableDownloadNotifications": "Notificaciones de descarga",
+    "enableDownloadNotificationsDescription": "Muestra una notificación del sistema cuando termine una descarga.",
+    "downloadWithoutChannelSubfolders": "Guardar videos sin subcarpetas del canal",
+    "downloadWithoutChannelSubfoldersDescription": "Guarda las descargas de videos individuales directamente en la carpeta Videos en lugar de crear una subcarpeta por canal.",
     "embedChapters": "Incrustar capítulos",
     "embedChaptersDescription": "Agregar marcadores de capítulos al archivo cuando estén disponibles",
     "embedMetadata": "Incrustar metadatos",
@@ -472,6 +477,8 @@
     "proxy": "Proxy",
     "proxyDescription": "Servidor proxy para solicitudes de red",
     "proxyPlaceholder": "http://proxy:puerto",
+    "rememberLastAudioLanguage": "Recordar el último idioma de audio",
+    "rememberLastAudioLanguageDescription": "Usa el último idioma de audio que seleccionaste como predeterminado para futuras descargas de audio.",
     "selectConfigFile": "Seleccionar archivo de configuración",
     "selectPath": "Seleccionar",
     "showMoreFormats": "Mostrar más opciones de formato",

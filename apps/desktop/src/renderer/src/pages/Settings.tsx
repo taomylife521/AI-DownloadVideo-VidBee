@@ -745,6 +745,81 @@ export function Settings() {
                   })()}
                 </ItemActions>
               </Item>
+
+              <ItemSeparator />
+
+              <Item variant="muted">
+                <ItemContent>
+                  <ItemTitle>{t('settings.enableDownloadNotifications')}</ItemTitle>
+                  <ItemDescription>
+                    {t('settings.enableDownloadNotificationsDescription')}
+                  </ItemDescription>
+                </ItemContent>
+                <ItemActions>
+                  <Switch
+                    checked={settings.enableDownloadNotifications ?? true}
+                    onCheckedChange={(value) => {
+                      try {
+                        handleSettingChange('enableDownloadNotifications', value)
+                      } catch (error) {
+                        logger.error(
+                          '[Settings] Error changing enable download notifications:',
+                          error
+                        )
+                      }
+                    }}
+                  />
+                </ItemActions>
+              </Item>
+
+              <ItemSeparator />
+
+              <Item variant="muted">
+                <ItemContent>
+                  <ItemTitle>{t('settings.downloadWithoutChannelSubfolders')}</ItemTitle>
+                  <ItemDescription>
+                    {t('settings.downloadWithoutChannelSubfoldersDescription')}
+                  </ItemDescription>
+                </ItemContent>
+                <ItemActions>
+                  <Switch
+                    checked={settings.downloadWithoutChannelSubfolders ?? false}
+                    onCheckedChange={(value) => {
+                      try {
+                        handleSettingChange('downloadWithoutChannelSubfolders', value)
+                      } catch (error) {
+                        logger.error(
+                          '[Settings] Error changing downloadWithoutChannelSubfolders:',
+                          error
+                        )
+                      }
+                    }}
+                  />
+                </ItemActions>
+              </Item>
+
+              <ItemSeparator />
+
+              <Item variant="muted">
+                <ItemContent>
+                  <ItemTitle>{t('settings.rememberLastAudioLanguage')}</ItemTitle>
+                  <ItemDescription>
+                    {t('settings.rememberLastAudioLanguageDescription')}
+                  </ItemDescription>
+                </ItemContent>
+                <ItemActions>
+                  <Switch
+                    checked={settings.rememberLastAudioLanguage ?? true}
+                    onCheckedChange={(value) => {
+                      try {
+                        handleSettingChange('rememberLastAudioLanguage', value)
+                      } catch (error) {
+                        logger.error('[Settings] Error changing rememberLastAudioLanguage:', error)
+                      }
+                    }}
+                  />
+                </ItemActions>
+              </Item>
             </ItemGroup>
           </TabsContent>
 

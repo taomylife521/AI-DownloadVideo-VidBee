@@ -317,6 +317,7 @@
     "subscriptions": "定期購入",
     "preferences": "設定",
     "supportedSites": "サポートされているサイト",
+    "tools": "ツール",
     "theme": "テーマ："
   },
   "notifications": {
@@ -442,6 +443,10 @@
     "launchAtLoginUnsupported": "自動起動は macOS と Windows でのみ利用できます。",
     "enableAnalytics": "VidBee の改善にご協力ください",
     "enableAnalyticsDescription": "匿名の使用状況データを共有することで、アプリの使用状況を把握し、改善の優先順位を付けることができます。",
+    "enableDownloadNotifications": "ダウンロード通知",
+    "enableDownloadNotificationsDescription": "ダウンロードが完了したときにシステム通知を表示します。",
+    "downloadWithoutChannelSubfolders": "チャンネルのサブフォルダーを作らずに動画を保存",
+    "downloadWithoutChannelSubfoldersDescription": "単一動画のダウンロードをチャンネル用サブフォルダーではなく Videos フォルダーに直接保存します。",
     "embedChapters": "チャプターを埋め込む",
     "embedChaptersDescription": "利用可能な場合はファイルにチャプターマーカーを追加",
     "embedMetadata": "メタデータを埋め込む",
@@ -472,6 +477,8 @@
     "proxy": "プロキシ",
     "proxyDescription": "ネットワークリクエスト用のプロキシサーバー",
     "proxyPlaceholder": "http://proxy:port",
+    "rememberLastAudioLanguage": "前回の音声言語を記憶する",
+    "rememberLastAudioLanguageDescription": "次回以降の音声ダウンロードで、前回選択した音声言語をデフォルトとして使います。",
     "selectConfigFile": "設定ファイルを選択",
     "selectPath": "選択",
     "showMoreFormats": "より多くのフォーマットオプションを表示",

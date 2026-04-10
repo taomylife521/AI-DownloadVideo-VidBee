@@ -317,6 +317,7 @@
     "subscriptions": "Berlangganan",
     "preferences": "Preferensi",
     "supportedSites": "Situs yang Didukung",
+    "tools": "Alat",
     "theme": "Tema:"
   },
   "notifications": {
@@ -442,6 +443,10 @@
     "launchAtLoginUnsupported": "Peluncuran otomatis hanya tersedia di macOS dan Windows.",
     "enableAnalytics": "Bantu tingkatkan VidBee",
     "enableAnalyticsDescription": "Bagikan data penggunaan anonim untuk membantu kami memahami bagaimana aplikasi digunakan dan memprioritaskan peningkatan.",
+    "enableDownloadNotifications": "Notifikasi unduhan",
+    "enableDownloadNotificationsDescription": "Tampilkan notifikasi sistem saat unduhan selesai.",
+    "downloadWithoutChannelSubfolders": "Simpan video tanpa subfolder kanal",
+    "downloadWithoutChannelSubfoldersDescription": "Simpan unduhan video tunggal langsung ke folder Videos tanpa membuat subfolder kanal.",
     "embedChapters": "Sematkan bab",
     "embedChaptersDescription": "Tambahkan penanda bab ke file saat tersedia",
     "embedMetadata": "Sematkan metadata",
@@ -472,6 +477,8 @@
     "proxy": "Proxy",
     "proxyDescription": "Server proxy untuk permintaan jaringan",
     "proxyPlaceholder": "http://proxy:port",
+    "rememberLastAudioLanguage": "Ingat bahasa audio terakhir",
+    "rememberLastAudioLanguageDescription": "Gunakan kembali bahasa audio terakhir yang Anda pilih sebagai bawaan untuk unduhan audio berikutnya.",
     "selectConfigFile": "Pilih file konfigurasi",
     "selectPath": "Pilih",
     "showMoreFormats": "Tampilkan lebih banyak opsi format",

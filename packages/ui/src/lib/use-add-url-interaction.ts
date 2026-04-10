@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { isPlaylistLikeUrl } from './url-kind'
 
 const isLikelyUrl = (value: string): boolean => {
   try {
@@ -76,6 +77,14 @@ export const useAddUrlInteraction = ({
     }
 
     setAddUrlPopoverOpen(false)
+
+    if (isPlaylistLikeUrl(trimmedUrl)) {
+      if (isPlaylistBusy) {
+        return
+      }
+      await onParsePlaylist(trimmedUrl)
+      return
+    }
 
     if (activeTab === 'playlist') {
       if (isPlaylistBusy) {

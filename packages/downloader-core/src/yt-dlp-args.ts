@@ -1,5 +1,6 @@
 import os from 'node:os'
 import path from 'node:path'
+import { parseBrowserCookiesSetting } from './browser-cookies-setting'
 
 export interface YtDlpDownloadSettings {
   downloadPath?: string
@@ -34,6 +35,33 @@ const hasYouTubeHost = (host: string): boolean =>
   YOUTUBE_HOST_SUFFIXES.some((suffix) => host === suffix || host.endsWith(`.${suffix}`))
 
 const trim = (value?: string | null): string => value?.trim() ?? ''
+
+/**
+ * Normalize browser cookies settings before passing them to yt-dlp.
+ *
+ * Issue refs: #331, #337, #341.
+ */
+export const normalizeBrowserCookiesSettingForYtDlp = (value?: string | null): string => {
+  const rawValue = trim(value)
+  if (!rawValue || rawValue === 'none') {
+    return 'none'
+  }
+
+  const { browser, profile } = parseBrowserCookiesSetting(rawValue)
+  if (!profile) {
+    return browser
+  }
+
+  const looksLikePath = profile.includes('/') || profile.includes('\\')
+  if (!looksLikePath) {
+    return `${browser}:${profile}`
+  }
+
+  const profileName = profile.includes('\\')
+    ? path.win32.basename(profile)
+    : path.posix.basename(profile)
+  return profileName ? `${browser}:${profileName}` : browser
+}
 
 const isBilibiliUrl = (url: string): boolean => {
   try {
@@ -207,7 +235,7 @@ export const buildDownloadArgs = (
   const embedThumbnail = settings.embedThumbnail ?? false
   const embedMetadata = settings.embedMetadata ?? true
   const embedChapters = settings.embedChapters ?? true
-  const browserForCookies = trim(settings.browserForCookies)
+  const browserForCookies = normalizeBrowserCookiesSettingForYtDlp(settings.browserForCookies)
   const cookiesPath = trim(settings.cookiesPath)
   const hasSubtitleAuth = (browserForCookies && browserForCookies !== 'none') || Boolean(cookiesPath)
   const shouldAttemptSubtitles = !isBilibiliUrl(options.url) || hasSubtitleAuth
@@ -279,7 +307,7 @@ export const buildVideoInfoArgs = (
     args.push('--proxy', proxy)
   }
 
-  const browserForCookies = trim(settings.browserForCookies)
+  const browserForCookies = normalizeBrowserCookiesSettingForYtDlp(settings.browserForCookies)
   if (browserForCookies && browserForCookies !== 'none') {
     args.push('--cookies-from-browser', browserForCookies)
   }
@@ -316,7 +344,7 @@ export const buildPlaylistInfoArgs = (
     args.push('--proxy', proxy)
   }
 
-  const browserForCookies = trim(settings.browserForCookies)
+  const browserForCookies = normalizeBrowserCookiesSettingForYtDlp(settings.browserForCookies)
   if (browserForCookies && browserForCookies !== 'none') {
     args.push('--cookies-from-browser', browserForCookies)
   }

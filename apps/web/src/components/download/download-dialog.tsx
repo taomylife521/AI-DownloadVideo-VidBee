@@ -10,6 +10,7 @@ import { DownloadDialogLayout } from "@vidbee/ui/components/ui/download-dialog-l
 import { Input } from "@vidbee/ui/components/ui/input";
 import { Label } from "@vidbee/ui/components/ui/label";
 import { useAddUrlInteraction } from "@vidbee/ui/lib/use-add-url-interaction";
+import { useAddUrlShortcut } from "@vidbee/ui/lib/use-add-url-shortcut";
 import { FolderOpen, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -337,6 +338,11 @@ export function DownloadDialog({ onDownloadsChanged }: DownloadDialogProps) {
 		onOneClickDownload: handleOneClickFromAddUrl,
 		onParsePlaylist: handleParsePlaylistUrl,
 		onParseSingle: handleParseSingleUrl,
+	});
+
+	useAddUrlShortcut({
+		enabled: open,
+		onTrigger: handleOpenAddUrlPopover,
 	});
 
 	const handleOneClickDownload = useCallback(async () => {

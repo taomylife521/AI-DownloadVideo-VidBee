@@ -11,9 +11,15 @@ interface SidebarProps {
   currentPage: Page
   onPageChange: (page: Page) => void
   onOpenSupportedSites: () => void
+  onOpenTools: () => void
 }
 
-export function Sidebar({ currentPage, onPageChange, onOpenSupportedSites }: SidebarProps) {
+export function Sidebar({
+  currentPage,
+  onPageChange,
+  onOpenSupportedSites,
+  onOpenTools
+}: SidebarProps) {
   const { t } = useTranslation()
   const updateAvailable = useAtomValue(updateAvailableAtom)
 
@@ -37,6 +43,12 @@ export function Sidebar({ currentPage, onPageChange, onOpenSupportedSites }: Sid
       icon: appSidebarIcons.supportedSites,
       label: t('menu.supportedSites'),
       onClick: onOpenSupportedSites
+    },
+    {
+      id: 'tools',
+      icon: appSidebarIcons.tools,
+      label: t('menu.tools'),
+      onClick: onOpenTools
     }
   ]
 

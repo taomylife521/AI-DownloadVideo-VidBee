@@ -54,6 +54,7 @@ import {
 } from '../../store/downloads'
 import { settingsAtom } from '../../store/settings'
 import { useAppInfo } from '../feedback/FeedbackLinks'
+import { shouldOpenHistoryItemOnDoubleClick } from './download-item-utils'
 
 const tryFileOperation = async (
   paths: string[],
@@ -827,10 +828,36 @@ export function DownloadItem({ download, isSelected = false, onToggleSelect }: D
   return (
     <ContextMenu onOpenChange={setIsContextMenuOpen}>
       <ContextMenuTrigger asChild>
-        <div
+        <button
           className={`group relative w-full max-w-full overflow-hidden px-6 py-2 transition-colors ${
             isSelectedHistory || isContextMenuOpen ? 'bg-primary/10' : ''
           }`}
+          onDoubleClick={() => {
+            if (
+              shouldOpenHistoryItemOnDoubleClick({
+                entryType: download.entryType,
+                fileExists,
+                status: download.status
+              })
+            ) {
+              void handleOpenFile()
+            }
+          }}
+          onKeyDown={(e: React.KeyboardEvent) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              if (
+                shouldOpenHistoryItemOnDoubleClick({
+                  entryType: download.entryType,
+                  fileExists,
+                  status: download.status
+                })
+              ) {
+                void handleOpenFile()
+              }
+            }
+          }}
+          type="button"
         >
           <div
             className={`flex w-full flex-col gap-2 sm:flex-row sm:gap-3 ${
@@ -1217,7 +1244,7 @@ export function DownloadItem({ download, isSelected = false, onToggleSelect }: D
               </SheetContent>
             </Sheet>
           )}
-        </div>
+        </button>
       </ContextMenuTrigger>
       <ContextMenuContent>
         {isInProgressStatus ? (
